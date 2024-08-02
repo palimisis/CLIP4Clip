@@ -1,2 +1,9 @@
 .git
 .idea
+*.err
+*.out
+__pycache__
+ckpts
+compressed_videos
+msvd_data*
+*.pt
