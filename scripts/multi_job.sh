@@ -35,7 +35,7 @@ CUR_EPOCH=1
 
 CKPT_PATH="${CHK_PREFIX}/${DATE}/ckpts/ckpt_msvd_retrieval_looseType"
 
-sbatch -J $jid -o "${STDOUT}.out" -e "${STDOUT}.err" /home/it21902/vit-fine-tuning/scripts/train_msvd.sh \
+sbatch -J $jid -o "${STDOUT}.out" -e "${STDOUT}.err" /home/it21902/CLIP4Clip/scripts/train_msvd.sh \
                                                                             --output_dir ${CKPT_PATH}
 
 for ((i=1; i<${TOTAL_EPOCHS}; i++)); do
@@ -43,7 +43,7 @@ for ((i=1; i<${TOTAL_EPOCHS}; i++)); do
     jid=${EXP_NAME}_$i
     STDOUT="${LOGDIR}/$jid"
     depends=$(squeue --noheader --format %i --name ${EXP_NAME}_${d})
-    sbatch -J $jid -o "${STDOUT}.out" -e "${STDOUT}.err" -d afterany:${depends} /home/it21902/vit-fine-tuning/scripts/train_msvd.sh \
+    sbatch -J $jid -o "${STDOUT}.out" -e "${STDOUT}.err" -d afterany:${depends} /home/it21902/CLIP4Clip/scripts/train_msvd.sh \
                                                                                     --output_dir ${CKPT_PATH} \
                                                                                     --resume_model "${CKPT_PATH}\pytorch_model.bin.${d}"                                                                                    
 done
