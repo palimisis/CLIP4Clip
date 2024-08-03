@@ -20,4 +20,4 @@ torchrun --nproc_per_node=1 \
     --feature_framerate 1 --coef_lr 1e-3 \
     --freeze_layer_num 0 --slice_framepos 2 \
     --loose_type --linear_patch 2d --sim_header meanP \
-    --pretrained_clip_name "ViT-B/16"
+    --pretrained_clip_name "ViT-B/16" $@

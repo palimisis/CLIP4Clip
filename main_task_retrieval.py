@@ -1,22 +1,24 @@
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import unicode_literals
-from __future__ import print_function
+from __future__ import absolute_import, division, print_function, unicode_literals
 
-import torch
-import numpy as np
-import random
-import os
-from metrics import compute_metrics, tensor_text_to_video_metrics, tensor_video_to_text_sim
-import time
 import argparse
-from modules.tokenization_clip import SimpleTokenizer as ClipTokenizer
+import os
+import random
+import time
+
+import numpy as np
+import torch
+
+from dataloaders.data_dataloaders import DATALOADER_DICT
+from metrics import (
+    compute_metrics,
+    tensor_text_to_video_metrics,
+    tensor_video_to_text_sim,
+)
 from modules.file_utils import PYTORCH_PRETRAINED_BERT_CACHE
 from modules.modeling import CLIP4Clip
 from modules.optimization import BertAdam
-
-from util import parallel_apply, get_logger
-from dataloaders.data_dataloaders import DATALOADER_DICT
+from modules.tokenization_clip import SimpleTokenizer as ClipTokenizer
+from util import get_logger, parallel_apply
 
 torch.distributed.init_process_group(backend="nccl")
 
@@ -560,14 +562,17 @@ def main():
                 output_model_file = save_model(epoch, args, model, optimizer, tr_loss, type_name="")
 
                 ## Run on val dataset, this process is *TIME-consuming*.
-                # logger.info("Eval on val dataset")
-                # R1 = eval_epoch(args, model, val_dataloader, device, n_gpu)
+                logger.info("Eval on val dataset")
+                R1 = eval_epoch(args, model, val_dataloader, device, n_gpu)
 
+                logger.info("Eval on test dataset")
                 R1 = eval_epoch(args, model, test_dataloader, device, n_gpu)
                 if best_score <= R1:
                     best_score = R1
                     best_output_model_file = output_model_file
                 logger.info("The best model is: {}, the R1 is: {:.4f}".format(best_output_model_file, best_score))
+
+            break
 
         ## Uncomment if want to test on the best checkpoint
         # if args.local_rank == 0:
