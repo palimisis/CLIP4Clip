@@ -45,5 +45,6 @@ for ((i=1; i<${TOTAL_EPOCHS}; i++)); do
     depends=$(squeue --noheader --format %i --name ${EXP_NAME}_${d})
     sbatch -J $jid -o "${STDOUT}.out" -e "${STDOUT}.err" -d afterany:${depends} /home/it21902/CLIP4Clip/scripts/train_msvd.sh \
                                                                                     --output_dir ${CKPT_PATH} \
-                                                                                    --resume_model "${CKPT_PATH}/pytorch_model.bin.${d}"                                                                                    
+                                                                                    --init_model "${CKPT_PATH}/pytorch_model.bin.${d}" \
+                                                                                    --resume_model "${CKPT_PATH}/pytorch_opt.bin.${d}"
 done
