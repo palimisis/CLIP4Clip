@@ -11,7 +11,7 @@ conda activate c4c
 #python -m torch.distributed.launch
 torchrun --nproc_per_node=1 \
     main_task_retrieval.py --do_train --num_thread_reader=4 \
-    --epochs=5 --batch_size=16 --n_display=50 \
+    --epochs=5 --batch_size=8 --n_display=50 \
     --data_path "/home/it21902/CLIP4Clip/msvd_data" \
     --features_path "/home/it21902/CLIP4Clip/compressed_videos" \
     --output_dir ckpts/ckpt_msvd_retrieval_looseType \
